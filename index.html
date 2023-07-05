@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>ТИ4.0</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .photo {
+            max-width: 500px;
+            margin-left: 300px;
+        }
+
+        .right-section {
+            text-align: left;
+            margin-right: 20px;
+        }
+
+        .full-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            margin-bottom: 10px;
+            padding: 10px;
+            margin-right: 500px;
+            max-width: 500px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        .contact-info {
+            margin-bottom: 20px;
+            margin-right: 500px;
+            max-width: 500px;
+        }
+
+        .email,
+	.teleg,
+        .phone {
+            font-weight: bold;
+            color: #555;
+            display: block;
+        }
+
+        .email-ad,
+	.teleg-ad,
+        .phone-ad {
+            color: #777;
+        }
+        .main {
+            text-align: left;
+            margin-right: 500px;
+            max-width: 500px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <img class="photo" src="photo.jpg" alt="My Photo">
+        <div class="right-section">
+            <div class="full-name">
+                <span class="first-name">Лебедев</span>
+                <span class="last-name">Данил</span>
+            </div>
+            <div class="contact-info">
+                <span class="email">Email:</span>
+                <span class="email-ad">keno147@mail.ru</span>
+                <br> <!-- Add a line break here -->
+                <span class="phone">Phone:</span>
+                <span class="phone-ad">+7 (999) 999-99-99</span>
+                <br> <!-- Add a line break here -->
+                <span class="teleg">Telegram:</span>
+                <span class="teleg-ad">+7 (999) 999-99-99</span>
+            </div>
+            <div class="main">
+                <h2>Данные</h2>
+                <button class="btn" onclick="myFunction()">Нажмите</button>
+                <ul id="demo"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function autoRefresh() {
+            myFunction();
+            setTimeout(autoRefresh, 5000);
+        }
+        
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        function myFunction() {
+            (async () => {
+                let response = await fetch('https://kav-api.kovalev.team/servodrive/lastActualData?servoDriveId=1');
+                let el = document.getElementById('demo')
+                el.innerHTML = ""
+                let text = await response.text(); // прочитать тело ответа как текст
+                for (const [key, value] of Object.entries(JSON.parse(text)[0])) {
+                    const newEl = document.createElement("li")
+                    newEl.appendChild(document.createTextNode(`${key}: ${value}`))
+                    el.appendChild(newEl)
+                    await sleep(100)
+                }
+            })()
+        }
+        
+
+    </script>
+</body>
+</html>
